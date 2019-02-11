@@ -4,11 +4,10 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
-import com.badlogic.gdx.scenes.scene2d.actions.Actions.delay
-import com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence
+import com.badlogic.gdx.scenes.scene2d.actions.Actions.*
 import com.badlogic.gdx.scenes.scene2d.ui.Image
-import com.central.App
 import com.central.AppObj
+import ktx.actors.plusAssign
 import ktx.app.KtxScreen
 
 class EndScr : KtxScreen {
@@ -22,27 +21,29 @@ class EndScr : KtxScreen {
         endImage.setSize(AppObj.cam.viewportWidth, AppObj.cam.viewportHeight)
 
         endImage.color.a = 0f
-        endImage.addAction(sequence(
-                Actions.fadeIn(2f),
+        endImage += sequence(
+                fadeIn(2f),
                 delay(3f),
-                Actions.fadeOut(2f),
+                fadeOut(2f),
                 Actions.run {
                     AppObj.dialogMode = false
                     AppObj.app.setScreen<PreTitleScr>()
                 }
-        ))
-        AppObj.stg.addActor(endImage)
+        )
+        AppObj.stg += endImage
     }
 
     override fun render(delta: Float) {
         Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 1.0f)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
 
-        AppObj.stg.act(delta)
-        AppObj.stg.draw()
+        with(AppObj) {
+            stg.act(delta)
+            stg.draw()
 
-        AppObj.hudStg.act(delta)
-        AppObj.hudStg.draw()
+            hudStg.act(delta)
+            hudStg.draw()
+        }
 
         checkInput()
     }

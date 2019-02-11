@@ -27,18 +27,21 @@ class RenderSys : EntitySystem() {
 
     override fun update(deltaTime: Float) {
         val map = engine.getSystem(MapSys::class.java)
-        map.mr.setView(AppObj.cam)
-        map.mr2.setView(AppObj.cam2)
-        //map.mr.render()
 
-        map.mr2.batch.begin()
-        map.mr2.renderTileLayer(map.background)
-        map.mr2.batch.end()
+        with(map) {
+            mr.setView(AppObj.cam)
+            mr2.setView(AppObj.cam2)
+            //map.mr.render()
 
-        map.mr.batch.begin()
-        map.mr.renderTileLayer(map.behind)
-        map.mr.renderTileLayer(map.solid)
-        map.mr.batch.end()
+            mr2.batch.begin()
+            mr2.renderTileLayer(background)
+            mr2.batch.end()
+
+            mr.batch.begin()
+            mr.renderTileLayer(behind)
+            mr.renderTileLayer(solid)
+            mr.batch.end()
+        }
 
         AppObj.stg.batch.projectionMatrix = AppObj.cam.combined
 
@@ -56,18 +59,22 @@ class RenderSys : EntitySystem() {
                 PhysicsComp.PhysicalStates.JUMPING -> texture.jump.getKeyFrame(physics.stateTime, true)
             }
 
-            AppObj.stg.batch.draw(tex,
-                    physics.pos.x * AppObj.unitScale + shift * AppObj.unitScale, physics.pos.y * AppObj.unitScale,
-                    physics.w * AppObj.unitScale, physics.h * AppObj.unitScale,
-                    physics.w * AppObj.unitScale, physics.h * AppObj.unitScale,
-                    physics.scl.x * flip, physics.scl.y,
-                    physics.rot)
+            with(physics) {
+                AppObj.stg.batch.draw(tex,
+                        pos.x * AppObj.unitScale + shift * AppObj.unitScale, pos.y * AppObj.unitScale,
+                        w * AppObj.unitScale, h * AppObj.unitScale,
+                        w * AppObj.unitScale, h * AppObj.unitScale,
+                        scl.x * flip, scl.y,
+                        rot)
+            }
         }
 
         AppObj.stg.batch.end()
 
-        map.mr.batch.begin()
-        map.mr.renderTileLayer(map.inFront)
-        map.mr.batch.end()
+        with(map) {
+            mr.batch.begin()
+            mr.renderTileLayer(inFront)
+            mr.batch.end()
+        }
     }
 }

@@ -15,12 +15,15 @@ class CameraFollowSys : IteratingSystem(Family.all(PhysicsComp::class.java, Came
     override fun processEntity(entity: Entity, deltaTime: Float) {
         val physics = pm.get(entity)
 
-        AppObj.cam.position.x = (physics.pos.x * AppObj.unitScale + physics.w * AppObj.unitScale / 2).toBigDecimal().setScale(2, RoundingMode.DOWN).toFloat()
-        AppObj.cam2.position.x = (physics.pos.x * AppObj.unitScale * 0.35f).toBigDecimal().setScale(2, RoundingMode.DOWN).toFloat()
+        // this RoundingMode.DOWN thing fixes an issue where little lines are flickering between some tiles because of weird calculations caused by the camera
+        with(AppObj) {
+            cam.position.x = (physics.pos.x * unitScale + physics.w * unitScale / 2).toBigDecimal().setScale(2, RoundingMode.DOWN).toFloat()
+            cam2.position.x = (physics.pos.x * unitScale * 0.35f).toBigDecimal().setScale(2, RoundingMode.DOWN).toFloat()
 
-        AppObj.cam.position.y = (physics.pos.y * AppObj.unitScale + physics.h * AppObj.unitScale / 2).toBigDecimal().setScale(2, RoundingMode.DOWN).toFloat()
-        AppObj.cam2.position.y = (physics.pos.y * AppObj.unitScale * 0.35f).toBigDecimal().setScale(2, RoundingMode.DOWN).toFloat()
-        AppObj.cam.update()
-        AppObj.cam2.update()
+            cam.position.y = (physics.pos.y * unitScale + physics.h * unitScale / 2).toBigDecimal().setScale(2, RoundingMode.DOWN).toFloat()
+            cam2.position.y = (physics.pos.y * unitScale * 0.35f).toBigDecimal().setScale(2, RoundingMode.DOWN).toFloat()
+            cam.update()
+            cam2.update()
+        }
     }
 }

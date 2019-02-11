@@ -32,8 +32,8 @@ class MapSys : EntitySystem() {
 
     private val tiles = Array<Rectangle>()
 
-    private var player: ImmutableArray<Entity> = ImmutableArray(Array<Entity>())
-    private var ai: ImmutableArray<Entity> = ImmutableArray(Array<Entity>())
+    private var player = ImmutableArray(Array<Entity>())
+    private var ai = ImmutableArray(Array<Entity>())
 
     // create a pool of rectangle objects for collision detection
     private val rectPool = object : Pool<Rectangle>() {
@@ -70,39 +70,24 @@ class MapSys : EntitySystem() {
     }
 
     fun getHorizNeighbourTiles(velocity: Vector2, rect: Rectangle, tileLayer: TiledMapTileLayer): Array<Rectangle> {
-        val startX: Int
-        val startY: Int
-        val endX: Int
-        val endY: Int
+        val startY = rect.y.toInt()
+        val endY = (rect.y + rect.height).toInt()
+
         // if the sprite is moving right, get the tiles to its right side
-        if (velocity.x > 0) {
-            endX = (rect.x + rect.width).toInt()
-            startX = endX
-        } else { // if the sprite is moving left, get the tiles to its left side
-            endX = rect.x.toInt()
-            startX = endX
-        }
-        startY = rect.y.toInt()
-        endY = (rect.y + rect.height).toInt()
+        // if the sprite is moving left, get the tiles to its left side
+        val startX = if (velocity.x > 0) (rect.x + rect.width).toInt() else rect.x.toInt()
+        val endX = startX
 
         return getTiles(startX, startY, endX, endY, tileLayer)
     }
 
     fun getVertNeighbourTiles(velocity: Vector2, rect: Rectangle, tileLayer: TiledMapTileLayer): Array<Rectangle> {
-        val startX: Int
-        val startY: Int
-        val endX: Int
-        val endY: Int
+        val startX = rect.x.toInt()
+        val endX = (rect.x + rect.width).toInt()
         // if sprite is moving up, get the tiles above it
-        if (velocity.y > 0) {
-            endY = (rect.y + rect.height).toInt()
-            startY = endY
-        } else { // if sprite is moving down, get the tiles below it
-            endY = rect.y.toInt()
-            startY = endY
-        }
-        startX = rect.x.toInt()
-        endX = (rect.x + rect.width).toInt()
+        // if sprite is moving down, get the tiles below it
+        val startY = if (velocity.y > 0) (rect.y + rect.height).toInt() else rect.y.toInt()
+        val endY = startY
 
         return getTiles(startX, startY, endX, endY, tileLayer)
     }
@@ -120,16 +105,18 @@ class MapSys : EntitySystem() {
 
             myTiles.forEach {
                 if (testRect.overlaps(it)) {
-                    if (physics.vel.y > 0) {
-                        physics.pos.y = it.y / AppObj.unitScale - testRect.height / AppObj.unitScale
-                        physics.rect.y = it.y - physics.rect.height
-                    } else if (physics.vel.y < 0) {
-                        physics.pos.y = it.y / AppObj.unitScale + it.height / AppObj.unitScale
-                        physics.rect.y = it.y + it.height
-                        physics.grounded = true
-                        AppObj.ic.aPressed = false
+                    with(physics) {
+                        if (vel.y > 0) {
+                            pos.y = it.y / AppObj.unitScale - testRect.height / AppObj.unitScale
+                            rect.y = it.y - rect.height
+                        } else if (vel.y < 0) {
+                            pos.y = it.y / AppObj.unitScale + it.height / AppObj.unitScale
+                            rect.y = it.y + it.height
+                            grounded = true
+                            AppObj.ic.aPressed = false
+                        }
+                        vel.y = 0f
                     }
-                    physics.vel.y = 0f
                 }
             }
 
@@ -156,15 +143,17 @@ class MapSys : EntitySystem() {
 
             myTiles.forEach {
                 if (testRect.overlaps(it)) {
-                    if (physics.vel.y > 0) {
-                        physics.pos.y = it.y / AppObj.unitScale - testRect.height / AppObj.unitScale
-                        physics.rect.y = it.y - physics.rect.height
-                    } else if (physics.vel.y < 0) {
-                        physics.pos.y = it.y / AppObj.unitScale + it.height / AppObj.unitScale
-                        physics.rect.y = it.y + it.height
-                        physics.grounded = true
+                    with(physics) {
+                        if (vel.y > 0) {
+                            pos.y = it.y / AppObj.unitScale - testRect.height / AppObj.unitScale
+                            rect.y = it.y - rect.height
+                        } else if (vel.y < 0) {
+                            pos.y = it.y / AppObj.unitScale + it.height / AppObj.unitScale
+                            rect.y = it.y + it.height
+                            grounded = true
+                        }
+                        vel.y = 0f
                     }
-                    physics.vel.y = 0f
                 }
             }
 
@@ -181,16 +170,18 @@ class MapSys : EntitySystem() {
                 }
             }
 
-            if (physics.grounded == true) {
-                if (physics.facesRight) testRect.set(physics.pos.x * AppObj.unitScale + 1, physics.pos.y * AppObj.unitScale - 1, physics.w * AppObj.unitScale, physics.h * AppObj.unitScale)
-                else testRect.set(physics.pos.x * AppObj.unitScale - 1, physics.pos.y * AppObj.unitScale - 1, physics.w * AppObj.unitScale, physics.h * AppObj.unitScale)
-                myTiles = getVertNeighbourTiles(physics.vel, testRect, this.solid)
+            with(physics) {
+                if (grounded == true) {
+                    if (facesRight) testRect.set(pos.x * AppObj.unitScale + 1, pos.y * AppObj.unitScale - 1, w * AppObj.unitScale, h * AppObj.unitScale)
+                    else testRect.set(pos.x * AppObj.unitScale - 1, pos.y * AppObj.unitScale - 1, w * AppObj.unitScale, h * AppObj.unitScale)
+                    myTiles = getVertNeighbourTiles(vel, testRect, solid)
 
-                if (myTiles.size == 0) {
-                    physics.direction *= -1
-                    physics.rect.x -= physics.vel.x * AppObj.unitScale
-                    physics.facesRight = !physics.facesRight
-                    return
+                    if (myTiles.size == 0) {
+                        direction *= -1
+                        rect.x -= vel.x * AppObj.unitScale
+                        facesRight = !facesRight
+                        return
+                    }
                 }
             }
         }

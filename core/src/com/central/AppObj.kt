@@ -1,20 +1,14 @@
 package com.central
 
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.graphics.Color.*
 import com.badlogic.gdx.graphics.OrthographicCamera
-import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.Texture.TextureFilter
-import com.badlogic.gdx.graphics.g2d.NinePatch
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton
-import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable
-import com.badlogic.gdx.utils.viewport.FillViewport
-import com.badlogic.gdx.utils.viewport.FitViewport
 import com.badlogic.gdx.utils.viewport.StretchViewport
 import com.central.input.GamepadCtl
 import com.central.input.InputCtl
@@ -29,26 +23,30 @@ object AppObj {
 
     val skin = Skin(Gdx.files.internal("skin/skin/skinui.json"))
 
+    val desiredWidth = 480f
+    val desiredHeight = 480f
+
     val sb = SpriteBatch()
     val cam = OrthographicCamera(width, height)
     val cam2 = OrthographicCamera(width, height)
-    val view = StretchViewport(480f, 360f, cam)
+    val view = StretchViewport(desiredWidth, desiredHeight, cam)
     val stg = Stage(view, sb)
 
     val hudSb = SpriteBatch()
     val hudCam = OrthographicCamera(width, height)
-    val hudView = StretchViewport(480f, 360f, hudCam)
+    val hudView = StretchViewport(desiredWidth, desiredHeight, hudCam)
     val hudStg = Stage(hudView , hudSb)
 
     val dialogSb = SpriteBatch()
     val dialogCam = OrthographicCamera(width, height)
-    val dialogView = StretchViewport(480f, 360f, dialogCam)
+    val dialogView = StretchViewport(desiredWidth, desiredHeight, dialogCam)
     val dialogStg = Stage(dialogView , dialogSb)
 
     val ic = InputCtl()
     val gpc = GamepadCtl()
     val osc = OnScreenGamepad()
 
+    // the width of my tiles in the tilemap - makes things sane so you can use tile coordinates
     val unitScale = 1 / 16f
     val grav = 10f
 
@@ -69,13 +67,15 @@ object AppObj {
         cam.setToOrtho(false, tilesWide, tilesHigh)
         cam2.setToOrtho(false, tilesWide, tilesHigh)
 
-        fontParameters.size = 24
-        fontParameters.color = Color.WHITE
-        fontParameters.borderWidth = 2f
-        fontParameters.borderColor = Color.BLACK
-        fontParameters.borderStraight = true
-        fontParameters.minFilter = TextureFilter.Linear
-        fontParameters.magFilter = TextureFilter.Linear
+        with(fontParameters) {
+            size = 24
+            color = WHITE
+            borderWidth = 2f
+            borderColor = BLACK
+            borderStraight = true
+            minFilter = TextureFilter.Linear
+            magFilter = TextureFilter.Linear
+        }
 
         labelStyle.font = customFont
     }

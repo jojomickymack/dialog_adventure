@@ -19,30 +19,36 @@ class PhysicsSys : IteratingSystem(Family.all(PhysicsComp::class.java).get()) {
         if (!AppObj.paused) {
             val physics = pm.get(entity)
 
-            // progresses animation for getKeyFrame calls
-            physics.stateTime += deltaTime
+            with(physics) {
+                // progresses animation for getKeyFrame calls
+                stateTime += deltaTime
 
-            physics.vel.y -= AppObj.grav
+                vel.y -= AppObj.grav
 
-            physics.vel.x *= dampening
-            if (physics.grounded) physics.state = PhysicsComp.PhysicalStates.WALKING
+                vel.x *= dampening
+                if (grounded) state = PhysicsComp.PhysicalStates.WALKING
 
-            if (Math.abs(physics.vel.x) < 10) {
-                physics.vel.x = 0f
-                if (physics.grounded) physics.state = PhysicsComp.PhysicalStates.STANDING
+                if (Math.abs(vel.x) < 10) {
+                    vel.x = 0f
+                    if (grounded) state = PhysicsComp.PhysicalStates.STANDING
+                }
+
+                pos.x += vel.x * 0.04f
+                pos.y += vel.y * 0.04f
+
+                // since the camera is dependent on the position of the player I'm using this
+                // fix to avoid this weird problem with transparent lines flickering between
+                // tiles - it's caused by some weird calculations that occur with tilemaps
+                // and the camera
+                pos.x = pos.x.toBigDecimal().setScale(2, RoundingMode.DOWN).toFloat()
+                pos.y = pos.y.toBigDecimal().setScale(2, RoundingMode.DOWN).toFloat()
+
+                rect.set(pos.x, pos.y, w, h)
+
+                // go to the game end screen if you fall off the screen
+
+                if (pos.y < -100) AppObj.app.setScreen<EndScr>()
             }
-
-            physics.pos.x += physics.vel.x * 0.04f
-            physics.pos.y += physics.vel.y * 0.04f
-
-            physics.pos.x = physics.pos.x.toBigDecimal().setScale(2, RoundingMode.DOWN).toFloat()
-            physics.pos.y = physics.pos.y.toBigDecimal().setScale(2, RoundingMode.DOWN).toFloat()
-
-            physics.rect.set(physics.pos.x, physics.pos.y, physics.w, physics.h)
-
-            // go to the game end screen if you fall off the screen
-
-            if (physics.pos.y < -100) AppObj.app.setScreen<EndScr>()
         }
     }
 }

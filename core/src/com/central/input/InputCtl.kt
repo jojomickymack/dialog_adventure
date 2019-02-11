@@ -29,15 +29,9 @@ class InputCtl {
 
             override fun keyUp(event: InputEvent, keycode: Int): Boolean {
                 when (keycode) {
-                    Input.Keys.SPACE -> {
-                        aPressed = false
-                    }
-                    Input.Keys.LEFT, Input.Keys.A -> {
-                        lPressed = false
-                    }
-                    Input.Keys.RIGHT, Input.Keys.D -> {
-                        rPressed = false
-                    }
+                    Input.Keys.SPACE -> aPressed = false
+                    Input.Keys.LEFT, Input.Keys.A -> lPressed = false
+                    Input.Keys.RIGHT, Input.Keys.D -> rPressed = false
                 }
                 return false
             }

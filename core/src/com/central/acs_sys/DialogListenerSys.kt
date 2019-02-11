@@ -14,8 +14,8 @@ import com.central.dialog.DialogBox
 import com.central.dialog.TypewriterAct
 
 class DialogListenerSys : EntitySystem() {
-    private var speakers: ImmutableArray<Entity> = ImmutableArray(Array<Entity>())
-    private var listeners: ImmutableArray<Entity> = ImmutableArray(Array<Entity>())
+    private var speakers = ImmutableArray(Array<Entity>())
+    private var listeners = ImmutableArray(Array<Entity>())
 
     private val pm = ComponentMapper.getFor(PhysicsComp::class.java)
     private val dm = ComponentMapper.getFor(DialogComp::class.java)

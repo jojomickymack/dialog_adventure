@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence
 import com.central.AppObj
 import com.central.dialog.DialogBox
 import com.central.dialog.TypewriterAct
+import ktx.actors.plusAssign
 
 class DialogComp(lines: ArrayList<String>) : Component {
     var triggered = false
@@ -24,16 +25,16 @@ class DialogComp(lines: ArrayList<String>) : Component {
                 it.isVisible = true
                 mySequence = sequence()
                 myLines.forEach {
-                    mySequence.addAction(TypewriterAct(it))
+                    mySequence += TypewriterAct(it)
                 }
-                this.mySequence.addAction(Actions.run {
+                this.mySequence += Actions.run {
                     it.isVisible = false
                     AppObj.paused = false
                     AppObj.dialogMode = false
                     this.triggered = false
                     AppObj.ic.aPressed = false
-                })
-                it.dialogLabel.addAction(this.mySequence)
+                }
+                it.dialogLabel += this.mySequence
             }
         }
     }

@@ -23,17 +23,19 @@ class UserControlSys : IteratingSystem(Family.all(PhysicsComp::class.java, UserC
     public override fun processEntity(entity: Entity, deltaTime: Float) {
         val physics = pm.get(entity)
 
-        if (AppObj.ic.lPressed) {
-            physics.goLeft = true
-            physics.goRight = false
-        }
-        if (AppObj.ic.rPressed) {
-            physics.goLeft = false
-            physics.goRight = true
-        }
-        if (!AppObj.ic.lPressed and !AppObj.ic.rPressed) {
-            physics.goLeft = false
-            physics.goRight = false
+        with(physics) {
+            if (AppObj.ic.lPressed) {
+                goLeft = true
+                goRight = false
+            }
+            if (AppObj.ic.rPressed) {
+                goLeft = false
+                goRight = true
+            }
+            if (!AppObj.ic.lPressed and !AppObj.ic.rPressed) {
+                goLeft = false
+                goRight = false
+            }
         }
 
         if (!AppObj.dialogMode) physics.jumping = AppObj.ic.aPressed
