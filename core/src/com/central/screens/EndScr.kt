@@ -11,7 +11,7 @@ import ktx.actors.plusAssign
 import ktx.app.KtxScreen
 
 class EndScr : KtxScreen {
-    private val endImage = Image(Texture(Gdx.files.internal("end_bg.png")))
+    private val endImage = Image(AppObj.endBgTex)
 
     override fun show() {
         Gdx.input.inputProcessor = AppObj.hudStg

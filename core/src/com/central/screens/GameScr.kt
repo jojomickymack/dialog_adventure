@@ -40,7 +40,7 @@ fun spawnEnemies(engine: Engine) {
             val enemyPhys = PhysicsComp()
 
             with(enemyTex) {
-                loadSheet(Texture(Gdx.files.internal("zombie.png")), 5)
+                loadSheet(AppObj.zombieTex, 5)
                 stand = Animation(0f, regions[0])
                 walk = Animation(0.15f, regions[0], regions[1], regions[2], regions[3], regions[4])
                 jump = Animation(0f, regions[0])
@@ -67,7 +67,6 @@ fun spawnEnemies(engine: Engine) {
 
 class GameScr : KtxScreen {
 
-    val bkground = Texture(Gdx.files.internal("clouds.png"))
     var bkgroundOffSet = 0
 
     var ashleyEngine = Engine()
@@ -87,7 +86,7 @@ class GameScr : KtxScreen {
         Gdx.input.inputProcessor = AppObj.hudStg
         AppObj.dialogMode = false
 
-        bkground.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.ClampToEdge)
+        AppObj.bkgroundTex.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.ClampToEdge)
 
         with(ashleyEngine) {
             addSystem(PhysicsSys())
@@ -100,7 +99,7 @@ class GameScr : KtxScreen {
         }
 
         with(alexTex) {
-            loadSheet(Texture(Gdx.files.internal("adventurer_sheet.png")), 4)
+            loadSheet(AppObj.alexSpriteSheetTex, 4)
             stand = Animation(0f, alexTex.regions[0])
             walk = Animation(0.15f, alexTex.regions[1], alexTex.regions[2])
             jump = Animation(0f, alexTex.regions[3])
@@ -139,7 +138,7 @@ class GameScr : KtxScreen {
 
         with (AppObj.hudStg.batch) {
             begin()
-            draw(bkground, 0f, 0f, bkgroundOffSet / 4, 0, AppObj.hudStg.width.toInt(), AppObj.hudStg.height.toInt())
+            draw(AppObj.bkgroundTex, 0f, 0f, bkgroundOffSet / 4, 0, AppObj.hudStg.width.toInt(), AppObj.hudStg.height.toInt())
             end()
         }
 

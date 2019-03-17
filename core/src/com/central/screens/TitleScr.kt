@@ -13,9 +13,9 @@ import ktx.app.KtxScreen
 
 
 class TitleScr : KtxScreen {
-    private val bgImage = Image(Texture(Gdx.files.internal("titlebg.png")))
-    private val title = Image(Texture(Gdx.files.internal("title01.png")))
-    private val guy = Image(Texture(Gdx.files.internal("guy.png")))
+    private val bgImage = Image(AppObj.bgTex)
+    private val title = Image(AppObj.titleTex)
+    private val guy = Image(AppObj.guyTex)
 
     override fun show() {
         Gdx.input.inputProcessor = AppObj.hudStg

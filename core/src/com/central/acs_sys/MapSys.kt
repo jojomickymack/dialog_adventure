@@ -20,15 +20,11 @@ import com.central.acs_comp.UserControlComp
 
 class MapSys : EntitySystem() {
 
-    val map = TmxMapLoader().load("map/map.tmx")
-    val mr = OrthogonalTiledMapRenderer(map, AppObj.unitScale)
-    val mr2 = OrthogonalTiledMapRenderer(map, AppObj.unitScale)
-
-    val inFront = map.layers.get("in_front") as TiledMapTileLayer
-    val solid = map.layers.get("solid") as TiledMapTileLayer
-    val behind = map.layers.get("behind") as TiledMapTileLayer
-    val background = map.layers.get("background") as TiledMapTileLayer
-    val enemyLayer = map.layers.get("enemies") as MapLayer
+    val inFront = AppObj.map.layers.get("in_front") as TiledMapTileLayer
+    val solid = AppObj.map.layers.get("solid") as TiledMapTileLayer
+    val behind = AppObj.map.layers.get("behind") as TiledMapTileLayer
+    val background = AppObj.map.layers.get("background") as TiledMapTileLayer
+    val enemyLayer = AppObj.map.layers.get("enemies") as MapLayer
 
     private val tiles = Array<Rectangle>()
 

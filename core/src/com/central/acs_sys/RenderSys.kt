@@ -29,18 +29,18 @@ class RenderSys : EntitySystem() {
         val map = engine.getSystem(MapSys::class.java)
 
         with(map) {
-            mr.setView(AppObj.cam)
-            mr2.setView(AppObj.cam2)
+            AppObj.mr.setView(AppObj.cam)
+            AppObj.mr2.setView(AppObj.cam2)
             //map.mr.render()
 
-            mr2.batch.begin()
-            mr2.renderTileLayer(background)
-            mr2.batch.end()
+            AppObj.mr2.batch.begin()
+            AppObj.mr2.renderTileLayer(background)
+            AppObj.mr2.batch.end()
 
-            mr.batch.begin()
-            mr.renderTileLayer(behind)
-            mr.renderTileLayer(solid)
-            mr.batch.end()
+            AppObj.mr.batch.begin()
+            AppObj.mr.renderTileLayer(behind)
+            AppObj.mr.renderTileLayer(solid)
+            AppObj.mr.batch.end()
         }
 
         AppObj.stg.batch.projectionMatrix = AppObj.cam.combined
@@ -72,9 +72,9 @@ class RenderSys : EntitySystem() {
         AppObj.stg.batch.end()
 
         with(map) {
-            mr.batch.begin()
-            mr.renderTileLayer(inFront)
-            mr.batch.end()
+            AppObj.mr.batch.begin()
+            AppObj.mr.renderTileLayer(inFront)
+            AppObj.mr.batch.end()
         }
     }
 }

@@ -13,8 +13,8 @@ import ktx.app.KtxScreen
 
 
 class PreTitleScr : KtxScreen {
-    private val bgImage = Image(Texture(Gdx.files.internal("sky.png")))
-    private val logo = Image(Texture(Gdx.files.internal("logo.png")))
+    private val bgImage = Image(AppObj.skyTex)
+    private val logo = Image(AppObj.logoTex)
 
     override fun show() {
         Gdx.input.inputProcessor = AppObj.hudStg

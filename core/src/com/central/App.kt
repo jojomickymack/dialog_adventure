@@ -20,4 +20,10 @@ class App : KtxGame<Screen>() {
         AppObj.music.isLooping = true
         // AppObj.music.play()
     }
+
+    override fun dispose() {
+        AppObj.dispose()
+        println("all disposable memory freed")
+        super.dispose()
+    }
 }
